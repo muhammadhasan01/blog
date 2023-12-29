@@ -1,10 +1,10 @@
-import siteMetadata from "@/data/siteMetadata";
-import headerNavLinks from "@/data/headerNavLinks";
-import Link from "./Link";
-import MobileNav from "./MobileNav";
-import ThemeSwitch from "./ThemeSwitch";
-import SearchButton from "./SearchButton";
-import Image from "@/components/Image";
+import siteMetadata from '@/data/siteMetadata'
+import headerNavLinks from '@/data/headerNavLinks'
+import Link from './Link'
+import MobileNav from './MobileNav'
+import ThemeSwitch from './ThemeSwitch'
+import SearchButton from './SearchButton'
+import Image from '@/components/Image'
 
 const Header = () => {
   return (
@@ -12,10 +12,17 @@ const Header = () => {
       <div>
         <Link href="/" aria-label={siteMetadata.headerTitle}>
           <div className="flex items-center justify-between">
-            <div className="mt-1 mr-2">
-              <Image src="/static/images/logo-h.png" alt="logo" width={35} height={35} quality={100} unoptimized />
+            <div className="mr-2 mt-1">
+              <Image
+                src="/static/images/logo-h.png"
+                alt="logo"
+                width={35}
+                height={35}
+                quality={100}
+                unoptimized
+              />
             </div>
-            {typeof siteMetadata.headerTitle === "string" ? (
+            {typeof siteMetadata.headerTitle === 'string' ? (
               <div className="hidden h-6 text-2xl font-semibold sm:block">
                 {siteMetadata.headerTitle}
               </div>
@@ -27,7 +34,7 @@ const Header = () => {
       </div>
       <div className="flex items-center space-x-4 leading-5 sm:space-x-6">
         {headerNavLinks
-          .filter((link) => link.href !== "/")
+          .filter((link) => link.href !== '/')
           .map((link) => (
             <Link
               key={link.title}
@@ -42,7 +49,7 @@ const Header = () => {
         <MobileNav />
       </div>
     </header>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header
