@@ -1,0 +1,107 @@
+---
+title: Combinations of K Elements from N Elements in C++
+date: '2023-12-30'
+tags: ['programming']
+draft: true
+summary: On how to generate the combinations of picking K elements from N elements,
+images: []
+---
+
+## Problem Statement
+
+To kick off this blog, let's start of with a problem statement.
+
+Suppose your friend tells you that his phone's password matches this criteria:
+
+- It has exactly $8$ characters long
+- All the characters are distinct
+- All the characters consist of lowercase English letters (`a` to `z`)
+
+Unfortunately, your friend completely forgot his exact password, and needs help from you!
+
+You have the ability to plug your friend's phone to your computer and try to input every possible password to open up his phone (without having to worry about getting those $30$ seconds wait after incorrect attempts and all).
+
+The problem now is... how would you do it?
+
+## Idea
+
+Looks like there is no option to solve this problem using bruteforce technique.
+
+As the title of this blog might hint you already, this looks like generating all combination of taking $K$ elements from $N$ elements.
+
+In this case, generating all the combinations of all $8$ letters from the $26$ letters in the alphabet.
+
+Putting a little bit of math, we will have exactly $\displaystyle C(26, 8) = \frac{26!}{8! \times 18!} = 1562275$ combinations, which is only around a million!
+
+## Using C++ on Generating Combinations
+
+We can use C++ (The best programming language) for this type of problem mainly using the standard library [`next_permutation`](https://en.cppreference.com/w/cpp/algorithm/next_permutation).
+
+> In C++, `next_permutation` is a standard library function that rearranges the elements of a range (e.g., a container like a vector) into the next lexicographically greater permutation.
+
+In simpler terms, it helps you generate the next possible arrangement of elements in ascending order.
+
+For example if you have an array $[1, 1, 2]$ then using the next permutation it will then be $[1, 2, 1]$.
+
+Okay, but wait... aren't we suppose to find combinations? why are we talking permutations stuff?
+
+## Next Permutation Trick
+
+We can actually utilize `next_permutation` to solve our problem statement!
+
+We wanted to generate all combinations of picking $K$ elements from $N$ elements.
+
+We can do this with a simple idea.
+
+Let's make an array / vector with size $N$, set the first $N - K$ elements with $0$ and the other $K$ elements with $1$.
+
+And now we can use `next_permutation` to generate all the possibility of picking $K$ elements from $N$ elements.
+
+The idea is that if the value is $1$ in some position, that means we have picked that position.
+
+For an example, let's say $N=5$ and $K=2$ then we will have an initial array of $[0, 0, 0, 1, 1]$.
+
+Now our program will generate the following possiblity:
+
+- $[0, 0, 0, 1, 1] \rightarrow $ Picking the $4$-th and $5$-th element
+- $[0, 0, 1, 0, 1] \rightarrow $ Picking the $3$-th and $5$-th element
+- $[0, 0, 1, 1, 0] \rightarrow $ Picking the $3$-th and $4$-th element
+- $\vdots$
+- $[1, 1, 0, 0, 0] \rightarrow $ Picking the $1$-th and $2$-th element
+
+We can be sure that all the combinations are found!
+
+## Code
+
+The code for the solution would look like the following:
+
+```cpp
+const string ALPHABET = "abcdefghijklmnopqrstuvwxyz";
+
+int N = 26, K = 8;
+vector<int> p(N, 1); // initialize all elements with the value 1
+// set the N - K first elements with 0
+// this way the last K elements will have the value 1
+for (int i = 0; i < N - K; i++) {
+    p[i] = 0;
+}
+do {
+    string password = "";
+    for (int i = 0; i < N; i++) {
+        if (p[i] == 1) {
+            password += ALPHABET[i];
+        }
+    }
+    // use the password to open up the phone!
+} while (next_permutation(p.begin(), p.end()));
+```
+
+The complexity would then be the number of possible combinations multiplied by the complexity of `next_permutation` itself which is at most $O(N)$[^1].
+
+So the total complexity would be around $O(C(N, K) \times N)$, not too bad! (I've actually tried running the code and it performs fast)
+
+## In Summary
+
+If you ever need to generate a combination of picking $K$ elements of $N$ elements, try using this `next_permutation` trick!
+
+[^1]: Based on [cppreference](https://en.cppreference.com/w/cpp/algorithm/next_permutation), the time complexity is at most $\frac{N}{2}$ swaps, where `N = std::distance(first, last)`. Averaged over the entire sequence of permutations, typical implementations use about $3$ comparisons and $1.5$ swaps per call.

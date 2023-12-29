@@ -22,21 +22,21 @@ module.exports = {
         14: '3.5rem',
       },
       fontFamily: {
-        sans: ['var(--font-space-grotesk)', ...fontFamily.sans],
+        sans: ['Helvetica', 'var(--font-space-grotesk)', ...fontFamily.sans],
       },
       colors: {
-        primary: colors.pink,
+        primary: colors.yellow,
         gray: colors.gray,
       },
       typography: ({ theme }) => ({
         DEFAULT: {
           css: {
             a: {
-              color: theme('colors.primary.500'),
+              color: theme('colors.primary.800'),
               '&:hover': {
-                color: `${theme('colors.primary.600')}`,
+                color: `${theme('colors.primary.900')}`,
               },
-              code: { color: theme('colors.primary.400') },
+              code: { color: theme('colors.primary.700') },
             },
             'h1,h2': {
               fontWeight: '700',
@@ -46,7 +46,7 @@ module.exports = {
               fontWeight: '600',
             },
             code: {
-              color: theme('colors.indigo.500'),
+              color: theme('colors.yellow.600'),
             },
           },
         },
