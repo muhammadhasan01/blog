@@ -1,0 +1,194 @@
+---
+title: Euler Totient Function
+date: '2023-12-31'
+tags: ['mathematics', 'number theory']
+draft: false
+summary: Blog about Euler Totient Function, it's definition, proof, and use cases
+images: []
+---
+
+I am long fascinated by Euler totient function, and so I wanted to write it here and share about it. Let's discuss the definition, use cases, and some proofs.
+
+# Definition
+
+Euler's totient function (also called the Phi function denoted with the $\phi$ symbol or $\varphi$ symbol) for a positive integer $n$, counts the number of positive integers less than or equal $n$ that are coprime to $n$.[^1]
+
+That is, for a positive integer $n$, $\phi(n)$ is the number of positive integer $x$ such that $1 \leq x \leq n$ and $\mathrm{gcd}(n, x) = 1$.
+
+For example, we would have $\phi(10) = 4$ since there are $4$ numbers less than $10$ that is coprime with $10$ which are $(1, 3, 7, 9)$.
+
+**Note**: we would have $\phi(1) = 1$ since the only positive integer less or equal to $1$ is $1$ and $\mathrm{gcd}(1, 1) = 1$.
+
+# Use Cases
+
+## Euler Theorem
+
+Euler's Theorem states that:
+
+Let $n$ and $a$ be a positive integers such that they are relatively prime, i.e. $\mathrm{gcd}(a, n) = 1$, then:
+
+$$a^{\phi(n)} \equiv 1 \ (\text{mod } n)$$
+
+For example, let's try computing $2023^{2020} \ \text{mod } 10$.
+
+Since $2023$ and $10$ are relatively prime, we will have:
+
+$$2023^{\phi(10)} \equiv 1 \ (\text{mod } 10) \implies 2023^{4} \equiv 1 \ (\text{mod } 10)$$
+
+Therefore we will have:
+
+$$\left(2023^{4}\right)^{505} \equiv 1^{505} \ (\text{mod } 10) \implies 2023^{2020} \equiv 1 \ (\text{mod } 10)$$
+
+So $2023^{2020} \ \text{mod } 10 = 1$.
+
+## Divisor Sum
+
+The property established by Gauss,[^2] is that:
+
+$$\displaystyle \sum_{d | n}\phi(d) = n$$
+
+where the sum is over all positive divisors $d$ of $n$.
+
+For example: when $n = 10$, then we will have $\phi(1) + \phi(2) + \phi(5) + \phi(10) = 10$, which is true.
+
+The formula can also be derived from elementary arithmetic.[^3]
+
+Let's continue with the previous example, let $n=10$ and consider the positive fractions up to $1$ with denominator $10$:
+
+$$\displaystyle \frac{1}{10}, \frac{2}{10}, \frac{3}{10}, \frac{4}{10}, \frac{5}{10}, \frac{6}{10}, \frac{7}{10}, \frac{8}{10}, \frac{9}{10}, \frac{10}{10}$$
+
+Let's put them in their lowest term:
+
+$$\displaystyle \frac{1}{10}, \frac{1}{5}, \frac{3}{10}, \frac{2}{5}, \frac{1}{2}, \frac{3}{5}, \frac{7}{10}, \frac{4}{5}, \frac{9}{10}, \frac{1}{1}$$
+
+Notice that for the denominator $10$ there are exactly $\phi(10) = 4$ fractions, e.g. $\displaystyle \frac{1}{10}, \frac{3}{10}, \frac{7}{10}, \frac{9}{10}$
+
+More generally, for each denominator $x$ we will have there are $\phi(x)$ such fractions in the list above.
+
+Thus the set of $10$ fractions is split into subsets of size $\phi(d)$ for each $d$ dividing $10$.
+
+A similar argument applies for any $n$.
+
+# Formula
+
+For a positive integer $n$ let $p_1, p_2, \dots, p_k$ be the distinct primes that divides $n$, then we will have:
+
+$$\displaystyle \phi(n) = n \left(1 - \frac{1}{p_1} \right) \left(1 - \frac{1}{p_2} \right) \cdots \left(1 - \frac{1}{p_k} \right)$$
+
+For example, we have for $n=10$ the primes that divides $n$ are $2$ and $5$ hence:
+
+$$\displaystyle \phi(10) = 10 \left(1 - \frac{1}{2} \right) \left(1 - \frac{1}{5} \right) = 4$$
+
+For the proof of this formula, we need to know some important facts
+
+### Phi is a multiplicative function
+
+Let $n$ and $m$ be a coprime positive integer then we will have:
+
+$$ \phi(nm) = \phi(n) \phi(m) $$
+
+Proof for this fact is: Let $A, B, C$ be the set of integers which are coprime to $n$, $m$, and $nm$ respectively.
+
+That is $\phi(n) = |A|$, $\phi(m) = |B|$, and $\phi(nm) = |C|$.
+
+Then we need to proof that there is a [bijection](https://en.wikipedia.org/wiki/Bijection) between the set $A \times B$ and the set $C$.
+
+In simpler terms, we need to proof that each element in $A \times B$ corresponds uniquely to an element in set $C$, and vice versa.
+
+This is essentially CRT i.e. [Chinese Remainder Theorem](https://en.wikipedia.org/wiki/Chinese_remainder_theorem) which states that if you have a system of modular congruences with relatively prime modulo (in this case, $n$ and $m$), then there exists a unique solution modulo the product of the modulo ($nm$).
+
+If $a$ is coprime to $n$ and $b$ is coprime to $m$ this bijection sends $(a,b)$ to $c$ with $c$ coprime to $nm$ (Because $c$ has no divisor in common with $n$ or $m$).
+
+Therefore there is a bijection between $A \times B$ with $C$
+
+Thus having: $ \phi(nm) = |A| \times |B| = \phi(n) \phi(m) $
+
+### Computing Phi with a prime power argument
+
+Let $p$ be a prime number and $k \geq 1$, then we will have:
+
+$$\displaystyle \phi(p^k) = p^k - p^{k-1} = p^k \left(1 - \frac{1}{p}\right)$$
+
+The proof for this is quite simple, the only way a positive integer $x \leq p$ having $\mathrm{gcd}(p, x) = 1$ is that $p$ does not divides $x$.
+
+Therefore $x$ would not be in the set $\{p, 2p, \dots, p^{k-1}p\}$ which have $p^{k-1}$ numbers.
+
+So $\phi(p^k) = p^k - p^{k-1}$.
+
+## Proof for Euler Totient's Function Formula
+
+Now that we now some important facts, we can prove the Euler Totient's Function Formula.
+
+Let $n$ be a positive integer, then we can represent $n$ using prime factorization as follows:
+
+$$n = p_1^{a_1} \times p_2^{a_2} \times \cdots \times p_k^{a_k} $$
+
+Where $p_i$ is prime nd $a_i$ is a positive integer for $1 \leq i \leq k$.
+
+We can rewrite it as:
+
+$$\displaystyle n = \prod_{i=1}^{k} p_i^{a_i} $$
+
+Using the facts of **multiplicative function** and **phi with a prime power argument**, we get:
+
+$$
+\begin{aligned}
+
+\phi(n) &= \phi\left(\prod_{i=1}^{k} p_i^{a_i}\right) \\
+&= \prod_{i=1}^{k} \phi(p_i^{a_i}) \\
+&= \prod_{i=1}^{k} \left( p_i^{a_i} \left(1 - \frac{1}{p_i} \right) \right) \\
+&= \left( \prod_{i=1}^{k} p_i^{a_i} \right) \left(\prod_{i=1}^{k} \left(1 - \frac{1}{p_i} \right) \right) \\
+&= n \left(\prod_{i=1}^{k} \left(1 - \frac{1}{p_i} \right) \right) \\
+&= n \left(1 - \frac{1}{p_1} \right) \left(1 - \frac{1}{p_2} \right) \cdots \left(1 - \frac{1}{p_k} \right)
+
+\end{aligned}
+$$
+
+## In Summary
+
+We learn about Euler Totient's Function, it's definiton, use cases, and proofs. Thanks for reading up until here, I hope you learn something :D
+
+## Bonus (Code)
+
+Here are C++ implementations for computing euler totient function:
+
+```cpp:euler-totient-function.cpp
+int phi(int n) {
+    int result = n;
+    for (int p = 2; p * p <= n; p++) {
+        if (n % p == 0) {
+            while (n % p == 0) {
+                n /= p;
+            }
+            result -= result / p;
+        }
+    }
+    if (n > 1) {
+        result -= result / n;
+    }
+    return result;
+}
+```
+
+Or we can also precompute using similar to Sieve Eratosthenes Trick:
+
+```cpp:precompute-phi.cpp
+const int N = 100000;
+
+vector<int> phi(N + 1);
+for (int i = 1; i <= N; i++) {
+    phi[i] = i;
+}
+for (int i = 2; i <= N; i++) {
+    if (phi[i] == i) {
+        for (int j = i; j <= N; j += i) {
+            phi[j] -= phi[j] / i;
+        }
+    }
+}
+```
+
+
+[^1]: Long, Calvin T. (1972), Elementary Introduction to Number Theory (2nd ed.), Lexington: D. C. Heath and Company, LCCN 77-171950
+[^2]: Gauss, DA, art 39
+[^3]: Graham et al. pp. 134-135
