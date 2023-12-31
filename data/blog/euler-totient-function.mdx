@@ -15,9 +15,9 @@ Euler's totient function (also called the Phi function denoted with the $\phi$ s
 
 That is, for a positive integer $n$, $\phi(n)$ is the number of positive integer $x$ such that $1 \leq x \leq n$ and $\mathrm{gcd}(n, x) = 1$.
 
-For example, we would have $\phi(10) = 4$ since there are $4$ numbers less than $10$ that is coprime with $10$ which are $(1, 3, 7, 9)$.
+For example, we would have $\phi(10) = 4$ since there are $4$ numbers less than or equal to $10$ that is coprime with $10$ which are $(1, 3, 7, 9)$.
 
-**Note**: we would have $\phi(1) = 1$ since the only positive integer less or equal to $1$ is $1$ and $\mathrm{gcd}(1, 1) = 1$.
+**Note**: we would have $\phi(1) = 1$ since the only positive integer less than or equal to $1$ is $1$ and $\mathrm{gcd}(1, 1) = 1$.
 
 # Use Cases
 
@@ -27,17 +27,23 @@ Euler's Theorem states that:
 
 Let $n$ and $a$ be a positive integers such that they are relatively prime, i.e. $\mathrm{gcd}(a, n) = 1$, then:
 
-$$a^{\phi(n)} \equiv 1 \ (\text{mod } n)$$
+$$
+a^{\phi(n)} \equiv 1 \ (\text{mod } n)
+$$
 
 For example, let's try computing $2023^{2020} \ \text{mod } 10$.
 
 Since $2023$ and $10$ are relatively prime, we will have:
 
-$$2023^{\phi(10)} \equiv 1 \ (\text{mod } 10) \implies 2023^{4} \equiv 1 \ (\text{mod } 10)$$
+$$
+2023^{\phi(10)} \equiv 1 \ (\text{mod } 10) \implies 2023^{4} \equiv 1 \ (\text{mod } 10)
+$$
 
 Therefore we will have:
 
-$$\left(2023^{4}\right)^{505} \equiv 1^{505} \ (\text{mod } 10) \implies 2023^{2020} \equiv 1 \ (\text{mod } 10)$$
+$$
+\left(2023^{4}\right)^{505} \equiv 1^{505} \ (\text{mod } 10) \implies 2023^{2020} \equiv 1 \ (\text{mod } 10)
+$$
 
 So $2023^{2020} \ \text{mod } 10 = 1$.
 
@@ -45,7 +51,9 @@ So $2023^{2020} \ \text{mod } 10 = 1$.
 
 The property established by Gauss,[^2] is that:
 
-$$\displaystyle \sum_{d | n}\phi(d) = n$$
+$$
+\displaystyle \sum_{d | n}\phi(d) = n
+$$
 
 where the sum is over all positive divisors $d$ of $n$.
 
@@ -55,13 +63,21 @@ The formula can also be derived from elementary arithmetic.[^3]
 
 Let's continue with the previous example, let $n=10$ and consider the positive fractions up to $1$ with denominator $10$:
 
-$$\displaystyle \frac{1}{10}, \frac{2}{10}, \frac{3}{10}, \frac{4}{10}, \frac{5}{10}, \frac{6}{10}, \frac{7}{10}, \frac{8}{10}, \frac{9}{10}, \frac{10}{10}$$
+$$
+\displaystyle \frac{1}{10}, \frac{2}{10}, \frac{3}{10}, \frac{4}{10}, \frac{5}{10}, \frac{6}{10}, \frac{7}{10}, \frac{8}{10}, \frac{9}{10}, \frac{10}{10}
+$$
 
 Let's put them in their lowest term:
 
-$$\displaystyle \frac{1}{10}, \frac{1}{5}, \frac{3}{10}, \frac{2}{5}, \frac{1}{2}, \frac{3}{5}, \frac{7}{10}, \frac{4}{5}, \frac{9}{10}, \frac{1}{1}$$
+$$
+\displaystyle \frac{1}{10}, \frac{1}{5}, \frac{3}{10}, \frac{2}{5}, \frac{1}{2}, \frac{3}{5}, \frac{7}{10}, \frac{4}{5}, \frac{9}{10}, \frac{1}{1}
+$$
 
-Notice that for the denominator $10$ there are exactly $\phi(10) = 4$ fractions, e.g. $\displaystyle \frac{1}{10}, \frac{3}{10}, \frac{7}{10}, \frac{9}{10}$
+Notice that for the denominator $10$ there are exactly $\phi(10) = 4$ fractions, e.g.:
+
+$$
+\displaystyle \frac{1}{10}, \frac{3}{10}, \frac{7}{10}, \frac{9}{10}
+$$
 
 More generally, for each denominator $x$ we will have there are $\phi(x)$ such fractions in the list above.
 
@@ -73,11 +89,15 @@ A similar argument applies for any $n$.
 
 For a positive integer $n$ let $p_1, p_2, \dots, p_k$ be the distinct primes that divides $n$, then we will have:
 
-$$\displaystyle \phi(n) = n \left(1 - \frac{1}{p_1} \right) \left(1 - \frac{1}{p_2} \right) \cdots \left(1 - \frac{1}{p_k} \right)$$
+$$
+\displaystyle \phi(n) = n \left(1 - \frac{1}{p_1} \right) \left(1 - \frac{1}{p_2} \right) \cdots \left(1 - \frac{1}{p_k} \right)
+$$
 
 For example, we have for $n=10$ the primes that divides $n$ are $2$ and $5$ hence:
 
-$$\displaystyle \phi(10) = 10 \left(1 - \frac{1}{2} \right) \left(1 - \frac{1}{5} \right) = 4$$
+$$
+\displaystyle \phi(10) = 10 \left(1 - \frac{1}{2} \right) \left(1 - \frac{1}{5} \right) = 4
+$$
 
 For the proof of this formula, we need to know some important facts
 
@@ -85,7 +105,9 @@ For the proof of this formula, we need to know some important facts
 
 Let $n$ and $m$ be a coprime positive integer then we will have:
 
-$$ \phi(nm) = \phi(n) \phi(m) $$
+$$
+\phi(nm) = \phi(n) \phi(m)
+$$
 
 Proof for this fact is: Let $A, B, C$ be the set of integers which are coprime to $n$, $m$, and $nm$ respectively.
 
@@ -107,7 +129,9 @@ Thus having: $ \phi(nm) = |A| \times |B| = \phi(n) \phi(m) $
 
 Let $p$ be a prime number and $k \geq 1$, then we will have:
 
-$$\displaystyle \phi(p^k) = p^k - p^{k-1} = p^k \left(1 - \frac{1}{p}\right)$$
+$$
+\displaystyle \phi(p^k) = p^k - p^{k-1} = p^k \left(1 - \frac{1}{p}\right)
+$$
 
 The proof for this is quite simple, the only way a positive integer $x \leq p$ having $\mathrm{gcd}(p, x) = 1$ is that $p$ does not divides $x$.
 
@@ -121,13 +145,17 @@ Now that we now some important facts, we can prove the Euler Totient's Function 
 
 Let $n$ be a positive integer, then we can represent $n$ using prime factorization as follows:
 
-$$n = p_1^{a_1} \times p_2^{a_2} \times \cdots \times p_k^{a_k} $$
+$$
+n = p_1^{a_1} \times p_2^{a_2} \times \cdots \times p_k^{a_k}
+$$
 
-Where $p_i$ is prime nd $a_i$ is a positive integer for $1 \leq i \leq k$.
+Where $p_i$ is prime and $a_i$ is a positive integer for $1 \leq i \leq k$.
 
 We can rewrite it as:
 
-$$\displaystyle n = \prod_{i=1}^{k} p_i^{a_i} $$
+$$
+\displaystyle n = \prod_{i=1}^{k} p_i^{a_i}
+$$
 
 Using the facts of **multiplicative function** and **phi with a prime power argument**, we get:
 
