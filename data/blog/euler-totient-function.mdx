@@ -123,7 +123,7 @@ If $a$ is coprime to $n$ and $b$ is coprime to $m$ this bijection sends $(a,b)$ 
 
 Therefore there is a bijection between $A \times B$ with $C$
 
-Thus having: $ \phi(nm) = |A| \times |B| = \phi(n) \phi(m) $
+Thus having: $ \phi(nm) = |A| \times |B| = \phi(n) \phi(m) $ $_{\Box}$
 
 ### Computing Phi with a prime power argument
 
@@ -137,7 +137,7 @@ The proof for this is quite simple, the only way a positive integer $x \leq p$ h
 
 Therefore $x$ would not be in the set $\{p, 2p, \dots, p^{k-1}p\}$ which have $p^{k-1}$ numbers.
 
-So $\phi(p^k) = p^k - p^{k-1}$.
+So $\phi(p^k) = p^k - p^{k-1}$. $_{\Box}$
 
 ## Proof for Euler Totient's Function Formula
 
@@ -167,14 +167,10 @@ $$
 &= \prod_{i=1}^{k} \left( p_i^{a_i} \left(1 - \frac{1}{p_i} \right) \right) \\
 &= \left( \prod_{i=1}^{k} p_i^{a_i} \right) \left(\prod_{i=1}^{k} \left(1 - \frac{1}{p_i} \right) \right) \\
 &= n \left(\prod_{i=1}^{k} \left(1 - \frac{1}{p_i} \right) \right) \\
-&= n \left(1 - \frac{1}{p_1} \right) \left(1 - \frac{1}{p_2} \right) \cdots \left(1 - \frac{1}{p_k} \right)
+&= n \left(1 - \frac{1}{p_1} \right) \left(1 - \frac{1}{p_2} \right) \cdots \left(1 - \frac{1}{p_k} \right) _{\Box}
 
 \end{aligned}
 $$
-
-## In Summary
-
-We learn about Euler Totient's Function, it's definiton, use cases, and proofs. Thanks for reading up until here, I hope you learn something :D
 
 ## Bonus (Code)
 
