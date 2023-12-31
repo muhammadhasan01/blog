@@ -28,7 +28,7 @@ The problem now is... how would you do it?
 
 Looks like there is no option to solve this problem without using bruteforce technique.
 
-As the title of this blog might hint you already, this looks like generating all combination of taking $K$ elements from $N$ elements.
+As the title of this blog might hint you already, this looks like generating all combination of taking $k$ elements from $n$ elements.
 
 In this case, generating all the combinations of all $8$ letters from the $26$ letters in the alphabet.
 
@@ -50,17 +50,17 @@ Okay, but wait... aren't we suppose to find combinations? why are we talking per
 
 We can actually utilize `next_permutation` to solve our problem statement!
 
-We wanted to generate all combinations of picking $K$ elements from $N$ elements.
+We wanted to generate all combinations of picking $k$ elements from $n$ elements.
 
 We can do this with a simple idea.
 
-Let's make an array / vector with size $N$, set the first $N - K$ elements with $0$ and the other $K$ elements with $1$.
+Let's make an array / vector with size $n$, set the first $n - k$ elements with $0$ and the other $k$ elements with $1$.
 
-And now we can use `next_permutation` to generate all the possibility of picking $K$ elements from $N$ elements.
+And now we can use `next_permutation` to generate all the possibility of picking $k$ elements from $n$ elements.
 
 The idea is that if the value is $1$ in some position, that means we have picked that position.
 
-For an example, let's say $N=5$ and $K=2$ then we will have an initial array of $[0, 0, 0, 1, 1]$.
+For an example, let's say $n=5$ and $k=2$ then we will have an initial array of $[0, 0, 0, 1, 1]$.
 
 Now our program will generate the following possiblity:
 
@@ -97,12 +97,12 @@ do {
 } while (next_permutation(p.begin(), p.end()));
 ```
 
-The complexity would then be the number of possible combinations multiplied by the complexity of `next_permutation` itself which is at most $O(N)$[^1].
+The complexity would then be the number of possible combinations multiplied by the complexity of `next_permutation` itself which is at most $O(n)$[^1].
 
-So the total complexity would be around $O(C(N, K) \times N)$, not too bad! (I've actually tried running the code and it performs fast)
+So the total complexity would be around $O(C(n, k) \cdot n)$, not too bad! (I've actually tried running the code and it performs fast)
 
 ## In Summary
 
-If you ever need to generate a combination of picking $K$ elements of $N$ elements, try using this `next_permutation` trick!
+If you ever need to generate a combination of picking $k$ elements of $n$ elements, try using this `next_permutation` trick!
 
-[^1]: Based on [cppreference](https://en.cppreference.com/w/cpp/algorithm/next_permutation), the time complexity is at most $\frac{N}{2}$ swaps, where `N = std::distance(first, last)`. Averaged over the entire sequence of permutations, typical implementations use about $3$ comparisons and $1.5$ swaps per call.
+[^1]: Based on [cppreference](https://en.cppreference.com/w/cpp/algorithm/next_permutation), the time complexity is at most $\frac{n}{2}$ swaps, where `N = std::distance(first, last)`. Averaged over the entire sequence of permutations, typical implementations use about $3$ comparisons and $1.5$ swaps per call.
