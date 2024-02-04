@@ -1,0 +1,166 @@
+---
+title: LeetCode Weekly Contest 383 Editorial
+date: '2024-02-04'
+tags: ['leetcode', 'editorial', 'programming']
+draft: false
+summary: My Editorial for LeetCode Weekly Contest 383
+images: []
+---
+
+[LeetCode - Weekly Contest 383](https://leetcode.com/contest/weekly-contest-383/) just finished, I managed to solve all $4$ problems in $25$ minutes, it seems that the problems were relatively easy and classic.
+
+I will try to add my editorial here, let's jump into it.
+
+## [Q1 - Ant on The Boundary](https://leetcode.com/contest/weekly-contest-383/problems/ant-on-the-boundary/)
+
+We can maintain the position of the ant, let's call this $pos$, and we simply count how many time $pos = 0$ after doing the operations.
+
+- Time Complexity: $O(N)$
+- Memory Complexity: $O(1)$
+
+```cpp
+class Solution {
+public:
+    int returnToBoundaryCount(vector<int>& nums) {
+        int pos = 0;
+        int ans = 0;
+        for (int x : nums) {
+            pos += x;
+            if (pos == 0) {
+                ++ans;
+            }
+        }
+        return ans;
+    }
+};
+```
+
+## [Q2/Q4 - Minimum Time to Revert Word to Initial State I/II](https://leetcode.com/contest/weekly-contest-383/problems/minimum-time-to-revert-word-to-initial-state-ii/)
+
+Suppose we have removed some of the word, and we are left with a suffix of a word, then if this whole suffix is a prefix of the word, we can fill in the characters at the end of the word correspondingly such that we have the initial state.
+
+So we can simply try to use the operations, and if the current suffix is a prefix of the word we can get the initial state of the word.
+
+If we can't find any suffix that matches and already removed all the word, then we can also get the initial state of the word.
+
+We can use [Z-function](https://cp-algorithms.com/string/z-function.html) to check whether a suffix of a word is also a prefix of the word.
+
+- Time Complexity: $O(N)$
+- Memory Complexity: $O(N)$
+
+```cpp
+class Solution {
+public:
+    vector<int> z_function(string& s) {
+        int n = s.size();
+        vector<int> z(n);
+        int l = 0, r = 0;
+        for (int i = 1; i < n; i++) {
+            if (i < r) {
+                z[i] = min(r - i, z[i - l]);
+            }
+            while (i + z[i] < n && s[z[i]] == s[i + z[i]]) {
+                z[i]++;
+            }
+            if (i + z[i] > r) {
+                l = i;
+                r = i + z[i];
+            }
+        }
+        return z;
+    }
+
+    int minimumTimeToInitialState(string word, int k) {
+        int n = (int) word.size();
+        vector<int> z = z_function(word);
+        int cnt = 1;
+        for (int pos = k; pos < n; pos += k, cnt++) {
+            if (z[pos] == n - pos) {
+                break;
+            }
+        }
+        return cnt;
+    }
+};
+```
+
+## [Q3 - Find the Grid Region Average](https://leetcode.com/contest/weekly-contest-383/problems/find-the-grid-of-region-average/)
+
+This is quite a tedious implementation problem, we can maintain two dimensional array $cnt$ and $sum$, where:
+
+- $cnt[i][j] =$ the number of region that $(i, j)$ have
+- $sum[i][j] =$ the average sums of region that $(i, j)$ have
+
+Now we can have that:
+
+$$
+results[i][j]=
+\begin{cases}
+    images[i][j]& \text{if } cnt[i][j] = 0\\
+    \left\lfloor\frac{sum[i][j]}{cnt[i][j]}\right \rfloor & \text{otherwise}
+\end{cases}
+$$
+
+To get the $cnt$ and $sum$, we can simply check if every region matches the threshold.
+
+- Time Complexity: O(NM)
+- Memory Complexity: O(NM)
+
+Where $N$ is the row size and $M$ is the column size
+
+```cpp
+class Solution {
+public:
+    vector<vector<int>> resultGrid(vector<vector<int>>& image, int threshold) {
+        const int K = 4;
+        const vector<int> DX = {0, 0, 1, -1};
+        const vector<int> DY = {1, -1, 0, 0};
+
+        int n = (int) image.size();
+        int m = (int) image[0].size();
+
+        vector<vector<int>> cnt(n, vector<int>(m));
+        vector<vector<int>> sum(n, vector<int>(m));
+
+        auto check = [&](int x1, int y1, int x2, int y2) -> void {
+            int sums = 0;
+            for (int i = x1; i <= x2; i++) {
+                for (int j = y1; j <= y2; j++) {
+                    sums += image[i][j];
+                    for (int k = 0; k < K; k++) {
+                        int ci = i + DX[k];
+                        int cj = j + DY[k];
+                        if (ci < x1 || ci > x2 || cj < y1 || cj > y2) {
+                            continue;
+                        }
+                        if (abs(image[i][j] - image[ci][cj]) > threshold) {
+                            return;
+                        }
+                    }
+                }
+            }
+            int avg = sums / 9;
+            for (int i = x1; i <= x2; i++) {
+                for (int j = y1; j <= y2; j++) {
+                    cnt[i][j]++;
+                    sum[i][j] += avg;
+                }
+            }
+        };
+
+        for (int i = 0; i + 2 < n; i++) {
+            for (int j = 0; j + 2 < m; j++) {
+                check(i, j, i + 2, j + 2);
+            }
+        }
+        vector<vector<int>> results(n, vector<int>(m));
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                results[i][j] = cnt[i][j] == 0 ? image[i][j] : sum[i][j] / cnt[i][j];
+            }
+        }
+        return results;
+    }
+};
+```
+
