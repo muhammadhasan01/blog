@@ -1,0 +1,67 @@
+---
+title: Euler's Theroem
+date: '2024-02-11'
+tags: ['mathematics', 'number-theory']
+draft: false
+summary: Blog about Euler's Theorem, it's definition and proof
+images: []
+---
+
+This is a continuation of the previous blog about [Euler's Totient Function](https://blog.mhasan01.com/blog/euler-totient-function), let's discuss the Euler's Theorem, yet again, it's definition and proof.
+
+## Definition
+
+Let $n$ and $a$ be a positive integers such that they are relatively prime, i.e. $\mathrm{gcd}(a, n) = 1$, then:
+
+$$
+a^{\phi(n)} \equiv 1 \ (\text{mod } n)
+$$
+
+Where $\phi(n)$ is Euler's Totient Function.
+
+
+## Proof
+
+There are famously two known proofs here, a direct argument involving multiplying all the elements together, and the other uses a [group theory](https://brilliant.org/wiki/group-theory-introduction/), we'll only discuss the first proof here.
+
+First of all, we will use the notation $(\mathbb{Z}/n)^*$, which is the set in the definition of $\phi(n)$, consisting positive integers $\leq n$ which are relatively prime to $n$, formally:
+
+$$
+
+(\mathbb{Z}/n)^* = \{x \in \mathbb{N}: 1 \leq x \leq n, \mathrm{gcd}(n, x) = 1\}
+
+$$
+
+So $\phi(n) = |(\mathbb{Z}/n)^*|$.
+
+Consider the elements $x_1, x_2, \dots, x_{\phi(n)}$ of $(\mathbb{Z}/n)^*$.
+
+**Claim**: for $a \in (\mathbb{Z}/n)^*$,
+multiplication by $a$ makes it into a permutation of this set, that is the set $\{ax_1, ax_2, \dots, ax_{\phi(n)}\}$ equals to $(\mathbb{Z}/n)^*$.
+
+The claim is true, because the multiplication by $a$ is a function from the finite set $(\mathbb{Z}/n)^*$ to itself **has an inverse**, which is the multiplication by $a^{-1} \ (\text{mod } n)$.
+
+For instance, let $n=10$ then we will have:
+
+$$
+(\mathbb{Z}/n)^* = \{1, 3, 7, 9\}
+$$
+
+Multiplication by $a=3$ where $a \in (\mathbb{Z}/n)^*$ turns it into $\{3, 9, 1, 7\}$ which is permutes the element of the set. Also, multiplication by $7 = 3^{-1} \ (\text{mod } 10)$ is the inverse of this permutation.
+
+Now, given the claim, consider the product of all the elements in $(\mathbb{Z}/n)^*$.
+
+On one hand it is $\prod_{i=1}^{\phi(n)} x_i$, and on the other hand, it is $\prod_{i=1}^{\phi(n)} (ax_i)$, both products are congruent modulo $n$.
+
+So we will have:
+
+$$
+\begin{aligned}
+\prod_{i=1}^{\phi(n)} x_i &\equiv \prod_{i=1}^{\phi(n)} (ax_i) \\
+\prod_{i=1}^{\phi(n)} x_i &\equiv a^{\phi(n)} \prod_{i=1}^{\phi(n)} x_i \\
+1 &\equiv a^{\phi(n)}
+\end{aligned}
+$$
+
+where cancellation of the $x_i$ is allowed because they all have multiplication inverse modulo $n$. $_{\Box}$
+
