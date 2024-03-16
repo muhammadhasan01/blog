@@ -1,0 +1,308 @@
+---
+title: LeetCode Biweekly Contest 126 Editorial
+date: '2024-02-04'
+tags: ['leetcode', 'editorial', 'programming']
+draft: false
+summary: My Editorial for LeetCode Biweekly Contest 126
+images: []
+---
+
+[LeetCode - Biweekly Contest 126](https://leetcode.com/contest/biweekly-contest-126/) just finished, and this was my best performance yet!
+
+I managed to solve all 4 problems cleanly in $27$ minutes, gaining $15$-th rank (not yet merged with other chinese contestants)
+
+I feel kinda nervous doing this contest at first, but it turns out quite good on the end.
+
+I will try to add my editorial here, let's jump into it.
+
+Here is my Editorial
+
+[Q1 - Find the Sum of Encrypted Integers](https://leetcode.com/contest/biweekly-contest-126/problems/find-the-sum-of-encrypted-integers/)
+
+It's just an implementation problem, we need to change the digit of a number into the maximum digit
+
+I make the number into a string first, then create a new string consisting of all max digits, and then convert it to the number
+
+We then sum all of it.
+
+Time Complexity: $O(N)$
+
+Memory Complexity: $O(N)$
+
+```cpp
+class Solution {
+public:
+    int sumOfEncryptedInt(vector<int>& nums) {
+        int ans = 0;
+        for (int x : nums) {
+            string s = to_string(x);
+            char mx = '0';
+            for (char cc : s) {
+                mx = max(mx, cc);
+            }
+            int len = (int) s.size();
+            ans += stoi(string(len, mx));
+        }
+        return ans;
+    }
+};
+```
+
+[Q2 - Mark Elements on Array by Performing Queries](https://leetcode.com/contest/biweekly-contest-126/problems/mark-elements-on-array-by-performing-queries/)
+
+I think this one is "harder" than most Q2 I've seen in the past, but still doable.
+
+The main thing we can do here is to store the "indices" of the smallest values in nums, let's call them minIndices.
+This way, its easier to answer the queries for the $k$ part.
+
+And then we also need to store the current answer, and also maintain indices that we have marked.
+
+So for every query, we first check if the index is marked or not, if it's not marked then we can decrease our current answer and mark the index.
+
+We then have to iterate over the minIndices, we want to get $k$ numbers of indices (if possible)
+
+We do the same thing as previously, if it's not marked then we mark it, if it's already marked we continue iterating.
+
+Time Complexity: $O(N \log N)$
+
+Memory Complexity: $O(N)$
+
+```cpp
+class Solution {
+public:
+    vector<long long> unmarkedSumArray(vector<int>& nums, vector<vector<int>>& queries) {
+        int n = (int) nums.size();
+        vector<pair<int, int>> vals(n);
+        long long cursum = 0;
+        for (int i = 0; i < n; i++) {
+            vals[i] = {nums[i], i};
+            cursum += nums[i];
+        }
+        sort(vals.begin(), vals.end());
+        int m = (int) queries.size();
+        vector<long long> ans(m);
+        vector<bool> done(n);
+        int pos = 0;
+        for (int i = 0; i < m; i++) {
+            int idx = queries[i][0];
+            int k = queries[i][1];
+            if (!done[idx]) {
+                done[idx] = true;
+                cursum -= nums[idx];
+            }
+            int cnt = 0;
+            while (pos < n && cnt < k) {
+                int at = vals[pos].second;
+                if (done[at]) {
+                    pos++;
+                    continue;
+                }
+                done[at] = true;
+                cursum -= nums[at];
+                pos++;
+                cnt++;
+            }
+            ans[i] = cursum;
+        }
+        return ans;
+    }
+};
+```
+
+[Q3 - Replace Question Marks in String to Minimize Its Value](https://leetcode.com/contest/biweekly-contest-126/problems/replace-question-marks-in-string-to-minimize-its-value/)
+
+This one took me some time to think.
+
+The main idea that I thought was figuring out what the cost would look like, and how would the cost be computed.
+
+Turns out, what matters is the number of each frequency of each character.
+
+If we know the frequency of each character, we can easily compute the cost which is:
+
+$$\displaystyle cost = \sum_{s \in \text{ lowercase english letters}} \frac{cnt[s] \times (cnt[s]-1)}{2}$$
+
+So what we can do to minimize the cost is try to distribute the $cnt$ as much as possible.
+
+Here I use an ordered set of $(cnt[s], s)$, I try to increase the $cnt[s]$ for the smallest $cnt[s]$ I can find
+
+I do that for every number of `?`
+
+Now that I know what characters I can add, we first sort the characters and then correspondingly fill the `?`.
+
+Time Complexity: $O(N \log N)$
+
+Memory Complexity: $O(N)$
+
+```cpp
+const int A = 26;
+
+class Solution {
+public:
+    string minimizeStringValue(string s) {
+        vector<int> freq(A);
+        vector<int> pos;
+        int n = (int) s.length();
+        for (int i = 0; i < n; i++) {
+            if (s[i] == '?') {
+                pos.emplace_back(i);
+            } else {
+                freq[(int) (s[i] - 'a')]++;
+            }
+        }
+        set<pair<int, int>> st;
+        for (int i = 0; i < A; i++) {
+            st.emplace(freq[i], i);
+        }
+        int m = (int) pos.size();
+        string cur = "";
+        for (int rep = 0; rep < m; rep++) {
+            auto [_, x] = *st.begin();
+            st.erase(st.begin());
+            cur += char(int('a') + x);
+            freq[x]++;
+            st.emplace(freq[x], x);
+        }
+        sort(cur.begin(), cur.end());
+        for (int i = 0; i < m; i++) {
+            s[pos[i]] = cur[i];
+        }
+        return s;
+    }
+};
+```
+
+[Q4 - Find the Sum of the Power of All Subsequences](https://leetcode.com/contest/biweekly-contest-126/problems/find-the-sum-of-the-power-of-all-subsequences/)
+
+This is the most interesting one.
+
+This problem has those types of hints telling it that it's a DP problem.
+
+Though, how can we use DP to solve this?
+
+I try to look at some observations here, and come up with this:
+
+Suppose we have a certain subsequence that has the sum exactly $k$
+
+Then how can we use that certain subsequence?
+
+Turns out, if the certain subsequence has exactly $X$ elements, that means there are $N - X$ other elements
+
+This certain subsequence will then occur for $2^{N-X}$ possibility, because for every other element **not** in the certain subsequence, we can either add it or not, and we will still have that certain subsequence.
+
+Now we can see that the $X$ or the count is important here, therefore I use:
+
+$dp[index][sum][cnt]$
+
+This tells me that in this $index$, how many ways can we get subsequence with summation of $sum$ and exactly $cnt$ elements
+
+In the implementation, we can further improve it, by removing the $index$ state on the DP
+
+Time Complexity: $O(N^2 K)$
+
+Memory Complexity: $O(NK)$
+
+```cpp
+struct mint {
+    const int MOD = 1e9 + 7;
+    int x;
+
+    mint(int _x) : x((_x % MOD + MOD) % MOD) {}
+    mint(long long _x) : x((_x % MOD + MOD) % MOD) {}
+
+    mint() : x(0) {}
+
+    mint &operator=(const mint &rhs) {
+        x = rhs.x;
+        return *this;
+    }
+
+    mint pow(long long n) const {
+        assert(0 <= n);
+        mint x = *this, r = mint(1);
+        while (n)
+        {
+            if (n & 1)
+                r *= x;
+            x *= x;
+            n >>= 1;
+        }
+        return r;
+    }
+
+    mint inv() const {
+        return pow(MOD - 2);
+    }
+
+    mint &operator+=(const mint &rhs) {
+        x += rhs.x;
+        if (x >= MOD)
+            x -= MOD;
+        return *this;
+    }
+
+    mint &operator-=(const mint &rhs) {
+        x -= rhs.x;
+        if (x < 0)
+            x += MOD;
+        return *this;
+    }
+
+    mint &operator*=(const mint &rhs) {
+        unsigned long long z = x;
+        z *= rhs.x;
+        x = (unsigned int)(z % MOD);
+        return *this;
+    }
+
+    mint &operator/=(const mint &rhs) {
+        return *this = *this * rhs.inv();
+    }
+
+    friend mint operator+(const mint &lhs, const mint &rhs) {
+        return mint(lhs) += rhs;
+    }
+
+    friend mint operator-(const mint &lhs, const mint &rhs) {
+        return mint(lhs) -= rhs;
+    }
+
+    friend mint operator*(const mint &lhs, const mint &rhs) {
+        return mint(lhs) *= rhs;
+    }
+
+    friend mint operator/(const mint &lhs, const mint &rhs) {
+        return mint(lhs) /= rhs;
+    }
+
+    friend ostream& operator<<(ostream &os, const mint &m) {
+        return os << m.x;
+    }
+};
+
+class Solution {
+public:
+    int sumOfPower(vector<int>& a, int k) {
+        int n = (int) a.size();
+        mint ans = 0;
+        vector dp(k + 1, vector<mint>(n + 1));
+        dp[0][0] = 1;
+        for (int x : a) {
+            vector ndp(k + 1, vector<mint>(n + 1));
+            for (int sum = 0; sum <= k; sum++) {
+                for (int cnt = 0; cnt <= n; cnt++) {
+                    ndp[sum][cnt] += dp[sum][cnt];
+                    if (sum + x <= k && cnt + 1 <= n) {
+                        ndp[sum + x][cnt + 1] += dp[sum][cnt];
+                    }
+                    if (sum + x == k && cnt + 1 <= n) {
+                        int other = n - (cnt + 1);
+                        ans += dp[sum][cnt] * mint(2).pow(other);
+                    }
+                }
+            }
+            dp.swap(ndp);
+        }
+        return ans.x;
+    }
+};
+```
