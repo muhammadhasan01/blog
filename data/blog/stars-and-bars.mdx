@@ -1,0 +1,124 @@
+---
+title: Stars and Bars
+date: '2024-04-20'
+tags: ['mathematics', 'combinatorics']
+draft: false
+summary: A mathematical technique for solving certain combinatorial problems. It occurs whenever you want to count the number of ways to group identical objects.
+images: []
+---
+
+## Motivation
+
+Stars and Bars Theorem is quite a cool mathematics technique, it's usually used in solving this problem:
+
+Given a non-negative integer $n$ and a positive integer $k$, find the number of solution of:
+
+$$
+x_1 + x_2 + \cdots + x_k = n
+$$
+
+where $x_i$ is a non-negative integer.
+
+For an example, when $n=4$ and $k=3$ then some of the possible solutions for $(x_1, x_2, x_3)$ are:
+
+$$
+(1, 1, 2), (3, 0, 1), (0, 4, 0), \ldots
+$$
+
+## Theorem
+
+To solve the problem above, we can use the **Stars and Bars Theorem** which states that:
+
+The number of ways to put $n$ identical objects into $k$ labeled boxes is:
+
+$$
+\binom{n + k - 1}{n}
+$$
+
+The proof involves turning the objects into stars and separating the boxes using bars (therefore the name). E.g. we can represent with:
+
+$$
+\bigstar | \bigstar \bigstar |~| \bigstar \bigstar
+$$
+
+The above situation: in the first box is one object, in the second box are two objects,
+the third one is empty and in the last box are two objects. This is one way of dividing $5$ objects into $4$ boxes.
+
+It should be pretty obvious, that every partition can be represented using $n$ stars and $k - 1$ bars and every stars and bars permutation using $n$ stars and $k - 1$ bars represents one partition.
+
+Therefore the number of ways to divide $n$ identical objects into $k$ labeled boxes is the same number as there are permutations of $n$ stars and $k - 1$ bars. The Binomial Coefficient gives us the desired formula.
+
+## Solving The Problem
+
+Now back on solving the previous problem, for $n=4$ and $k=3$ we wanted to find the number of possible solutions of:
+
+$$
+x_1 + x_2 + x_3 = 4
+$$
+
+where $x_i$ is a non-negative integer for $1 \leq i \leq k$.
+
+We can represent this with stars and bars, let's have $n$ stars and $k-1$ bars, then will have the following image:
+
+$$
+\bigstar \bigstar \bigstar \bigstar |~|
+$$
+
+The above image states that $x_1=4$, $x_2=0$, and $x_3=0$.
+
+Another example is when we have:
+
+$$
+\bigstar |\bigstar \bigstar| \bigstar
+$$
+
+Then we will have $x_1=1$, $x_2=2$, and $x_3=1$.
+
+Therefore, we can just find every possible combinations of stars and bars to solve this solution.
+
+So using the theorem, the number of solution is then:
+
+$$
+\begin{aligned}
+\binom{n + k - 1}{n} &= \binom{4+3-1}{4} \\
+&= \binom{6}{4} \\
+&= \frac{6!}{4! \cdot 2!} \\
+&= 15
+\end{aligned}
+$$
+
+## Solving With Lower Bound Constraint
+
+Let's have one more constraint, let's introduce new non-positive integers $y_i$ such that $0 \leq y_i \leq x_i$ for each $1 \leq i \leq k$
+
+Now the original problem remains the same, but we have to make sure that for each $x_i$ the constraint $0 \leq y_i \leq x_i$ is satisfied.
+
+Formally, given a non-negative integer $n$ and a positive integer $k$, find the number of solution of:
+
+$$
+x_1 + x_2 + \cdots + x_k = n
+$$
+
+where $x_i$ is a non-negative integer and $0 \leq y_i \leq x_i$.
+
+To solve this problem, let $z_i = x_i - y_i$, now we have $0 \leq z_i$ and now the equation becomes:
+
+$$
+\begin{aligned}
+x_1 + x_2 + \cdots + x_k &= n \\
+(z_1 + y_1) + (z_2 + y_2) + \cdots + (z_k + y_k) &= n \\
+z_1 + z_2 + \cdots + z_k &= n - (y_1 + y_2 + \cdots + y_k)
+\end{aligned}
+$$
+
+This is the same as the original problem, but now the right equation becomes different, now let:
+
+$$
+m = n - \sum_{i=1}^{k}y_k
+$$
+
+Therefore the number of solution is now:
+
+$$
+\binom{m + k - 1}{m}
+$$
