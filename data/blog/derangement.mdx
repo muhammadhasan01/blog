@@ -1,0 +1,132 @@
+---
+title: Derangement
+date: '2024-01-01'
+tags: ['mathematics', 'combinatorics']
+draft: false
+summary: A blog about derangement, a permutation of the elements of a set in which no element appears in its original position.
+images: []
+---
+
+Let's talk about Derangement, I've previously used it in some of my assignments back in my uni years [here](https://informatika.stei.itb.ac.id/~rinaldi.munir/Matdis/2019-2020/Makalah2019/13518012.pdf), so I'm thinking on describing it here as well.
+
+## Definition
+
+A derangement is a permutation with no fixed points. That is, a derangement of a set leaves no element in its original place. For example, the derangements of $\{1,2,3\}$ are $\{2, 3, 1\}$ and $\{3, 1, 2\}$, but $\{3,2, 1\}$ is not a derangement of $\{1,2,3\}$ because $2$ is a fixed point.
+
+## Notation and formula
+
+The number of derangements of an $n$-element set is called the $n$-th derangement number or rencontres number, or the subfactorial of $n$ and is sometimes denoted $!n$ or $D_n$.
+
+This number satisfies the recurrences:
+
+$$
+!n = (n - 1)\left[!(n - 1) + !(n - 2)\right]
+$$
+
+and is given by the formula
+
+$$
+!n = n! \sum_{k=0}^{n} \frac{(-1)^k}{k!}
+$$
+
+For example, the number derangements of a $3$-element set is:
+
+$$
+3! \cdot \sum_{k = 0}^3 \frac{(-1)^k}{k!} = 6\cdot\left(\frac{1}{1} - \frac{1}{1} + \frac{1}{2} - \frac{1}{6}\right) = 2
+$$
+
+Which we know to be correct.
+
+The first few derangements, starting from $n=0$, are
+
+$$
+1, 0, 1, 2, 9, 44, 265, 1854, 14833, 133496, 1334961, 14684570, \ldots
+$$
+
+## Proof on Recurrence
+
+Let's discuss the proof for the recurrences below:
+
+$$
+!n = (n - 1)\left[!(n - 1) + !(n - 2)\right]
+$$
+
+We start with some base cases first, that is $!0 = 1$, $!1 = 0$, and $!2 = 1$.
+
+Now suppose we have a permutation with $n \geq 3$ elements, and we want to put an element in the $n$-th position.
+
+We can try to put the value $i$ where $1 \leq i < n$ to the $n$-th position, then we will have two cases:
+
+**Case $1$**: The position $i$ does not receive the value $n$
+
+Notice that for every position $j$ such that $1 \leq j < n$ and $j \neq i$, then $j$ cannot have the value $j$, meanwhile the position $i$ cannot receive the value $n$.
+
+This is equivalent to a derangement of $n-1$ elements.
+
+Since we have $n-1$ possibility of picking $i$, we have a number of $(n-1) \cdot !(n-1)$ possibility for this case.
+
+**Case $2$**: The position $i$ receive the value $n$
+
+Now we will have $n-2$ elements remaining, this is equivalent to a derangement of $n-2$ elements.
+
+Since we have $n-1$ possibility of picking $i$, we have a number of $(n-1) \cdot !(n-2)$ possibility for this case.
+
+Therefore considering all possible cases, then we will have:
+
+$$
+!n = (n - 1)\left[!(n - 1) + !(n - 2)\right] _{\Box}
+$$
+
+## Proof on Formula
+
+Let's discuss on the proof of the formula:
+
+$$
+!n = n! \sum_{k=0}^{n} \frac{(-1)^k}{k!}
+$$
+
+This can be proven using [Principle of Inclusion and Exclusion (PIE)](https://brilliant.org/wiki/principle-of-inclusion-and-exclusion-pie/).
+
+First, you take $n!$, which represents all arrangements of the whole sequence.
+
+Then, you must subtract all arrangements in which each element appears in its original location, and now you have:
+
+$$
+n!-\binom{n}{1}(n-1)!
+$$
+
+Then, you must add back in permutations in which each set of two elements stay in their original positions, as we subtracted them twice.
+
+Now, we have:
+
+$$
+n!-\binom{n}{1}(n-1)!+\binom{n}{2}(n-2)!
+$$
+
+PIE continues to give us this pattern. We have to alternate between subtracting and adding.
+
+Now, we can change the form of $\binom{n}{k}(n-k)!$.
+
+This is written as:
+
+$$
+\frac{n!}{k!(n-k)!}\times(n-k)!=\frac{n!}{k!}
+$$
+
+We can now write our relation as
+
+$$
+n!-\frac{n!}{1!}+\frac{n!}{2!}-\frac{n!}{3!}+...+(-1)^n\left(\frac{n!}{n!}\right)
+$$
+
+We can factor out $n!$ and get:
+
+$$
+n!\left(1-\frac{1}{1!}+\frac{1}{2!}-\frac{1}{3!}+...+(-1)^n\frac{1}{n!}\right)=n!\sum_{k=0}^{n}\frac{(-1)^k}{k!}
+$$
+
+Therefore:
+
+$$
+!n = n! \sum_{k=0}^{n} \frac{(-1)^k}{k!} _{\Box}
+$$
