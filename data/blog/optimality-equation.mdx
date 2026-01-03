@@ -1,0 +1,121 @@
+---
+title: The Optimality Equation
+date: '2026-01-03'
+tags: ['general', 'mathematics']
+draft: false
+images: []
+summary: How to get an optimal result, demonstrated by a simple equation.
+---
+
+## Optimal Allocation
+
+Going to an extreme (all-in on one side) is rarely the winning move.
+
+But it's not always about being "perfectly balanced" either.
+
+Real progress is about **optimal allocation** under constraints.
+
+### A simple equation (Quality × Quantity)
+
+Let $\text{quality} = x$ and $\text{quantity} = y$.
+
+Assume you have a fixed budget of energy or time. Example:
+
+$$
+x + y = 100
+$$
+
+Define your total output as the product of the two:
+
+$$
+\text{output} = xy
+$$
+
+A few concrete points:
+
+- $x=90,\,y=10 \rightarrow \text{output}=900$ (Perfectionism, low volume)
+- $x=60,\,y=40 \rightarrow \text{output}=2400$
+- $x=50,\,y=50 \rightarrow \text{output}=2500$ **(Maximum Output)**
+- $x=20,\,y=80 \rightarrow \text{output}=1600$
+- $x=0,\,y=100 \rightarrow \text{output}=0$ (Spamming garbage)
+
+Extremes fail here. Pushing $x$ too high forces $y$ too low, and the product drops.
+
+Since $y = 100 - x$, output becomes a function of $x$:
+
+$$
+f(x) = x(100-x) = 100x - x^2
+$$
+
+Setting the derivative to zero ($f'(x) = 100 - 2x = 0$) gives us $x=50$.
+
+Meaning: **if output is $xy$ (weights are equal), an equal split is optimal**.
+
+## Raising the base
+
+If you want both quality and quantity to increase, you can't do it while $x+y=100$.
+You have to increase the base constraints:
+
+$$
+x+y=B \quad \Rightarrow \quad B \uparrow \Rightarrow x \uparrow \text{ and } y \uparrow
+$$
+
+This is what "improvement" really is. You aren't just reallocating effort; you are **expanding the budget** through better tools, higher leverage, or skill acquisition.
+
+## When quality matters more
+
+In the real world, quality often carries more weight than quantity. We model this by adding an exponent:
+
+$$
+\text{output} = x^2y,\quad x+y=100
+$$
+
+Here, quality ($x$) is squared, making it "twice as important" as quantity ($y$).
+
+Substitute $y=100-x$ and differentiate:
+
+$$
+f(x) = x^2(100-x) = 100x^2 - x^3
+$$
+
+$$
+f'(x) = 200x - 3x^2 = x(200 - 3x)
+$$
+
+Setting this to zero gives the critical point:
+
+$$
+x=\frac{200}{3} \approx 66.7
+$$
+
+$$
+y \approx 33.3
+$$
+
+Notice the ratio:
+
+$$
+x = 2y
+$$
+
+Because quality was squared $\left(x^2\right)$ and quantity was linear $\left(y^1\right)$, the optimal allocation is a **$2:1$ split**. The math mirrors the priority.
+
+It is not "balanced" (50/50), but it is **optimal**.
+
+## More than 2 variables
+
+Real life has many levers:
+
+$$
+x+y+z = B
+$$
+
+The principle holds:
+1.  **Don't maximize one variable** at the expense of zeroing out the others.
+2.  **Align allocation with impact.** If $x$ has the highest exponent (impact), allocate the most resources there, but do not neglect $y$ and $z$.
+
+---
+
+$$
+\textbf{Don’t chase extremes. Find the optimal allocation, then raise the base.}
+$$
