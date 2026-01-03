@@ -1,0 +1,114 @@
+---
+title: Pick Two Indices Decrease Both of Them
+date: '2024-07-10'
+tags: ['programming', 'mathematics']
+draft: false
+summary: An interesting problem that I've been pondering on for a while
+images: []
+---
+
+## Problem Statement
+
+I've been pondering about this problem for quite some time and wanted to share some insights about this problem.
+
+Given $n$ positive integers $a_1, a_2, \cdots, a_n$ $(n \geq 2)$, you can do the following operation:
+
+1. Choose two different indices $i$ and $j$ $(1 \leq i, j \leq n, i \neq j)$
+2. Decrease $a_i$ and $a_j$ by $1$
+
+Determine whether you can make all $a_i=0$ where $1 \leq i \leq n$ doing a number of operations.
+
+Furthermore, can you list out the operations as well if it is possible?
+
+---
+
+Think about this problem for a while, before moving on down this blog :)
+
+We can also extend this problem to some extend, like making all the integers the same with minimum number of operation.
+
+You can try out this problem similar to this:
+
+- [CodeForces - 1201B - Zero Array](https://codeforces.com/problemset/problem/1201/B)
+- [LeetCode - Weekly Contest 396 - Minimum Cost to Equalize Array](https://leetcode.com/problems/minimum-cost-to-equalize-array/description/)
+
+## Insights
+
+Let's look at some observations, let $S$ be the sum of all the integers that is:
+
+$$
+S=\sum_{i=1}^{n} a_i
+$$
+
+Doing one operations means decreasing $S$ by $2$, furthermore the parity (odd/even) of $S$ will never change, this is called an [Invariant](https://en.wikipedia.org/wiki/Invariant_(mathematics))
+
+That means if $S$ is odd from the beginning then we cannot make all integers into zero as zero is even.
+
+Okay, now we know that $S$ must be even, but this is not enough to solve the problem.
+
+Let's try to think in reverse, given $n$ zeros ($a_i = 0$ where $1 \leq i \leq n$), can we choose two different indices $i, j$ and increase $a_i$ and $a_j$ by $1$ such that it will result in the original array?
+
+Doing the reversed problem will give us some insights.
+
+Let suppose we choose an index $k$ $(1 \leq k \leq n)$ and we always pick $k$ every time we do an operation, what would we have?
+
+We could see all the sum of all other integers will result in $a_k$ and here on if we try to make any operation outside $k$ then we would have that $a_k \leq S-a_k$.
+
+From here, we can make a **claim** that for every integer $a_i$ then $a_i$ is less or equal to the sum of the other indices.
+
+To make it more simple, we can claim that the maximum integer in all of $a_i$ must be less or equal to the sum of all the other integers.
+
+We can prove the above claim using [mathematical induction](https://en.wikipedia.org/wiki/Mathematical_induction) by using the observation above.
+
+It turns out that this is all enough to solve the problem, that is:
+
+1. The sum of all integers is even
+2. The maximum integer is less than or equal to the sum of all other integers
+
+To get all the operations, one of the way is to always choose the maximum integer and minimum integer.
+
+## Bonus (Code)
+
+```cpp
+void solve() {
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    for (int i = 0; i < n ; i++) {
+        cin >> a[i];
+    }
+    int sum = accumulate(a.begin(), a.end(), 0);
+    if (sum % 2 == 1) {
+        cout << -1 << '\n';
+        return;
+    }
+    int mx = *max_element(a.begin(), a.end());
+    if (sum - mx < mx) {
+        cout << -1 << '\n';
+        return;
+    }
+    vector<pair<int, int>> operations;
+    set<pair<int, int>> st;
+    for (int i = 0; i < n; i++) {
+        st.emplace(a[i], i);
+    }
+    while (!st.empty()) {
+        int i = st.begin()->second;
+        int j = prev(st.end())->second;
+        operations.emplace_back(i, j);
+        st.erase({a[i], i});
+        st.erase({a[j], j});
+        a[i]--;
+        a[j]--;
+        if (a[i] > 0) {
+            st.emplace(a[i], i);
+        }
+        if (a[j] > 0) {
+            st.emplace(a[j], j);
+        }
+    }
+    cout << operations.size() << '\n';
+    for (auto [i, j] : operations) {
+        cout << i << ' ' << j << '\n';
+    }
+}
+```
